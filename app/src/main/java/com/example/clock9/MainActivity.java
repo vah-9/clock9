@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,9 +43,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        saveSetting();
+    }
+
     private void initializeSettings(){
 
         settingsData = new SettingsData();
+        SettingsData.settingsData = settingsData;
         File file = new File(getFilesDir(), SettingsData.settingsDataFileName);
         // считываем из файла настройки
         try (FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
@@ -64,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         // прячем или показываем кнопки, при нажатии на экран
         invertVisibility(R.id.btIncrease);
         invertVisibility(R.id.btDecrease);
-        invertVisibility(R.id.btSave);
     }
 
     private void invertVisibility(int id){
@@ -76,9 +83,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    public void btSave_onClick(View v) {
-
+    public void saveSetting(){
         try (FileOutputStream outputStream = openFileOutput(SettingsData.settingsDataFileName, Context.MODE_PRIVATE);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
             // сереализуем и сохраняем в файл настройки

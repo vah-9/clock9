@@ -34,27 +34,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:onClick="btIncrease_onClick"
-        android:text="+"
+        android:text="@string/btn_increase_text"
         android:textColor="@color/black"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btSave"
-
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:onClick="btSave_onClick"
-        android:visibility="invisible"
-        android:text="Save"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btDecrease"
-        app:strokeColor="@color/white" />
+        app:layout_constraintStart_toEndOf="@+id/btDecrease"/>
 
     <Button
         android:id="@+id/btDecrease"
@@ -64,10 +48,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:onClick="btDecrease_onClick"
-        android:text="-"
+        android:text="@string/btn_decrease_text"
         android:textColor="@color/black"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btIncrease" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">clock9</string>
+    <string name="btn_increase_text">+</string>
+    <string name="btn_decrease_text">-</string>
 </resources>
