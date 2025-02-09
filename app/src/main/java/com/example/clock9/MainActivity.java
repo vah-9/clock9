@@ -1,9 +1,13 @@
 package com.example.clock9;
 
+
+import android.animation.TimeAnimator;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
@@ -11,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextClock;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -20,7 +25,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +51,15 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         initializeSettings();
 
+//        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(4);
+//        Date currentTime = Calendar.getInstance().getTime();
+//        var initialDelay = 60000 - currentTime.getTime() % 60000;
+//        var initialDelay2 = 60000 - currentTime.getTime() % 60000 + 45000;
+//        Log.d("delay", Long.toString(currentTime.getTime()));
+//        Log.d("initialDelay", Long.toString(initialDelay));
+//        executorService.scheduleAtFixedRate(new Flasher(this), initialDelay, 60000, TimeUnit.MILLISECONDS);
+//        executorService.scheduleAtFixedRate(new Flasher(this), initialDelay2, 60000, TimeUnit.MILLISECONDS);
+
     }
 
     @Override
@@ -52,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private void initializeSettings(){
 
         settingsData = new SettingsData();
-        SettingsData.settingsData = settingsData;
+
         File file = new File(getFilesDir(), SettingsData.settingsDataFileName);
         // считываем из файла настройки
         try (FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
@@ -65,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             settingsData.font_size_land = font_size_default_integer;
             settingsData.font_size_port = font_size_default_integer;
         }
-        updateClock();
+        updateClockView();
     }
 
     public void onScreenTap(View v){
@@ -97,34 +116,44 @@ public class MainActivity extends AppCompatActivity {
 
     public void btIncrease_onClick(View v){
         // увеличиваем соответствующий размер шрифта
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        var orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             settingsData.font_size_port += 2;
-        }else{
+        }else if (orientation == Configuration.ORIENTATION_LANDSCAPE){
             settingsData.font_size_land += 2;
         }
-        updateClock();
+        updateClockView();
     }
 
     public void btDecrease_onClick(View v){
         // уменьшаем соответствующий размер шрифта
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        var orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             settingsData.font_size_port -= 2;
-        }else{
+        }else if (orientation == Configuration.ORIENTATION_LANDSCAPE){
             settingsData.font_size_land -= 2;
         }
-        updateClock();
+        updateClockView();
     }
 
-    private void updateClock(){
+    private void updateClockView(){
 
         TextClock textClock = findViewById(R.id.textClock);
+
+        var orientation = getResources().getConfiguration().orientation;
         // устанавливаем размер шрифта из настроек, в зависимости от ориентации экрана
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            textClock.setTextSize(TypedValue.COMPLEX_UNIT_DIP, settingsData.font_size_port);
-        }else{
-            textClock.setTextSize(TypedValue.COMPLEX_UNIT_DIP, settingsData.font_size_land);
+
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setClockSettings(textClock,settingsData.font_size_port,settingsData.format_24_port);
+        }else if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+            setClockSettings(textClock,settingsData.font_size_land,settingsData.format_24_land);
         }
 
+    }
+
+    private void setClockSettings(TextClock textClock, int fontSize,CharSequence timeFormat){
+        textClock.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize);
+        textClock.setFormat24Hour(timeFormat);
     }
 
 }
