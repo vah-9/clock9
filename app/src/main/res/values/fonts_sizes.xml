@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="font_size_default">82sp</dimen>
+    <integer name="font_size_default_integer">144</integer>
+</resources>

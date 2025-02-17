@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">clock9</string>
+    <string name="btn_increase_text">+</string>
+    <string name="btn_decrease_text">-</string>
+    <string name="settings">settings</string>
+    <string name="start_flash">Start Flash</string>
+    <string name="stop_flash">Stop Flash</string>
+</resources>
